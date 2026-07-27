@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  html { background: oklch(12% 0.015 255); }
+  body { margin: 0; font-family: 'Public Sans', Helvetica, Arial, sans-serif; background: oklch(99% 0.004 255); color: oklch(22% 0.02 255); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: oklch(32% 0.09 255); text-decoration: none; }
+  a:hover { color: oklch(24% 0.1 255); }
+  .df-title { font-family: 'Space Grotesk', 'Public Sans', sans-serif; }
+  @media (prefers-reduced-motion: reduce) { .film-beat { transition: none !important; } }
+  #film-nav-links { display: flex; }
+  #film-menu-btn { display: none; }
+  @media (max-width: 760px) {
+    #film-nav-links { display: none; }
+    #film-menu-btn { display: flex; }
+  }
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" id="top" style="min-height:100vh;background:oklch(99% 0.004 255);">
+
+  <!-- FIXED NAV -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 32px;">
+    <a href="#top" class="df-title" style="font-weight:700;font-size:18px;letter-spacing:0.02em;color:white;background:oklch(20% 0.02 255 / 0.35);backdrop-filter:blur(6px);padding:8px 16px;border-radius:100px;">DOTONE</a>
+    <nav id="film-nav-links" style="gap:22px;background:oklch(20% 0.02 255 / 0.35);backdrop-filter:blur(6px);padding:9px 20px;border-radius:100px;border:1px solid oklch(100% 0 0 / 0.12);">
+      <a href="#services" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Services</a>
+      <a href="#about" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">About</a>
+      <a href="#capability" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Capability</a>
+      <a href="#contact" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Contact</a>
+    </nav>
+    <button id="film-menu-btn" onClick="{{ toggleMenu }}" style="background:oklch(20% 0.02 255 / 0.35);backdrop-filter:blur(6px);border:1px solid oklch(100% 0 0 / 0.12);border-radius:100px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;">
+      <div style="width:16px;height:2px;background:white;box-shadow:0 5px 0 white,0 -5px 0 white;margin:0 auto;"></div>
+    </button>
+  </header>
+  <sc-if value="{{ mobileMenuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;top:72px;left:16px;right:16px;z-index:99;background:oklch(14% 0.02 255 / 0.97);backdrop-filter:blur(10px);border:1px solid oklch(100% 0 0 / 0.12);border-radius:16px;padding:8px;display:flex;flex-direction:column;">
+      <a href="#services" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">Services</a>
+      <a href="#about" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">About</a>
+      <a href="#capability" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">Capability</a>
+      <a href="#contact" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;">Contact</a>
+    </div>
+  </sc-if>
+
+  <!-- FILM DRIVER -->
+  <div ref="{{ filmDriverRef }}" style="position:relative;height:400vh;">
+    <div ref="{{ stageRef }}" style="position:sticky;top:0;height:100vh;width:100%;overflow:hidden;background:black;">
+
+      <div ref="{{ videoWrapRef }}" style="position:absolute;inset:0;">
+        <video ref="{{ videoRef }}" src="assets/globe-hero.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;filter:brightness(0.9) saturate(1.05);opacity:1;"></video>
+        <video ref="{{ videoBRef }}" src="assets/globe-hero.mp4" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;filter:brightness(0.9) saturate(1.05);opacity:0;"></video>
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, oklch(15% 0.03 255 / 0.1) 0%, oklch(8% 0.02 255 / 0.75) 100%);"></div>
+      </div>
+
+      <!-- GRID OVERLAY (dissolves in near end of film) -->
+      <div ref="{{ gridOverlayRef }}" style="position:absolute;inset:0;opacity:0;background-image:linear-gradient(oklch(70% 0.13 220 / 0.25) 1px, transparent 1px),linear-gradient(90deg, oklch(70% 0.13 220 / 0.25) 1px, transparent 1px);background-size:64px 64px;"></div>
+
+      <!-- BEAT 1 -->
+      <div ref="{{ beat1Ref }}" class="film-beat" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;">
+        <h1 class="df-title" style="font-size:clamp(48px,9vw,110px);font-weight:700;letter-spacing:-0.02em;color:white;margin:0 0 20px;">DOTONE</h1>
+        <p style="font-size:clamp(16px,2vw,22px);color:oklch(88% 0.02 255);max-width:560px;margin:0;font-weight:400;">IT services and consulting for the mission ahead.</p>
+      </div>
+
+      <!-- BEAT 2 -->
+      <div ref="{{ beat2Ref }}" class="film-beat" style="position:absolute;inset:0;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;">
+        <h2 class="df-title" style="font-size:clamp(32px,5.5vw,58px);font-weight:600;letter-spacing:-0.02em;color:white;margin:0 0 16px;">Every system connected.</h2>
+        <p style="font-size:clamp(15px,1.8vw,19px);color:oklch(85% 0.02 255);max-width:520px;margin:0 0 32px;">Cybersecurity and cloud infrastructure engineered as one.</p>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:48px;margin-bottom:28px;">
+          <div><div style="font-size:32px;font-weight:700;color:white;">15+</div><div style="font-size:13px;color:oklch(75% 0.02 255);margin-top:4px;">Years in operation</div></div>
+        </div>
+        <div style="display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;padding:16px 26px;border-radius:24px;background:oklch(25% 0.06 220 / 0.35);border:1px solid oklch(72% 0.13 220 / 0.5);max-width:min(640px,100%);box-sizing:border-box;">
+          <img src="assets/gsa-logo.png" alt="GSA logo" style="height:32px;width:auto;border-radius:4px;flex-shrink:0;">
+          <span style="font-size:15px;color:white;text-align:left;line-height:1.5;">Recognized by the GSA for the successful delivery of a mission-critical project supporting the Presidential Transition Team. Designed, built, and supported secure technology solutions serving presidential candidates and transition operations for the 2024 election.</span>
+        </div>
+      </div>
+
+      <!-- BEAT 3 -->
+      <div ref="{{ beat3Ref }}" class="film-beat" style="position:absolute;inset:0;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;">
+        <h2 class="df-title" style="font-size:clamp(32px,5.5vw,58px);font-weight:600;letter-spacing:-0.02em;color:white;margin:0 0 16px;">Built for the mission.</h2>
+        <p style="font-size:clamp(15px,1.8vw,19px);color:oklch(85% 0.02 255);max-width:520px;margin:0 0 20px;">Trusted by commercial teams and federal agencies alike.</p>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;background:oklch(100% 0 0 / 0.08);border:1px solid oklch(100% 0 0 / 0.18);">
+          <span style="font-size:13px;font-weight:600;color:white;letter-spacing:0.02em;">SAM.gov Registered · NIST 800-171 Aligned</span>
+        </div>
+      </div>
+
+      <div ref="{{ vignetteRef }}" style="position:absolute;inset:0;opacity:0;background:linear-gradient(to bottom, transparent 0%, black 100%);pointer-events:none;"></div>
+    </div>
+  </div>
+
+  <!-- LANDING ZONE: melt film-dark into site-dark -->
+  <div style="height:14vh;background:linear-gradient(to bottom, black, oklch(14% 0.02 255));"></div>
+
+  <!-- SERVICES -->
+  <section id="services" style="background:oklch(14% 0.02 255);padding:80px 24px 96px;">
+    <div style="max-width:1240px;margin:0 auto;">
+      <div style="max-width:640px;margin-bottom:48px;">
+        <div style="font-size:14px;font-weight:700;color:oklch(72% 0.13 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Services</div>
+        <h2 class="df-title" style="font-size:clamp(28px,3.4vw,40px);font-weight:700;letter-spacing:-0.02em;margin:0 0 16px;color:white;">Two disciplines. One accountable team.</h2>
+        <p style="font-size:17px;line-height:1.6;color:oklch(70% 0.02 255);margin:0;">We focus deliberately on the two service lines where we deliver the deepest expertise.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:24px;">
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:36px;">
+          <div style="width:44px;height:44px;border-radius:8px;background:oklch(25% 0.06 220 / 0.5);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+            <div style="width:16px;height:16px;border:2px solid oklch(72% 0.13 220);border-radius:50%;"></div>
+          </div>
+          <h3 style="font-size:21px;font-weight:700;margin:0 0 8px;color:white;">Cybersecurity</h3>
+          <p style="font-size:15px;line-height:1.6;color:oklch(72% 0.02 255);margin:0 0 16px;">Risk assessments, compliance readiness (NIST 800-171, CMMC), continuous monitoring, and incident response planning.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Risk &amp; vulnerability assessments</div>
+            <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Compliance readiness (NIST 800-171, CMMC)</div>
+            <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Continuous monitoring &amp; incident response</div>
+          </div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:36px;">
+          <div style="width:44px;height:44px;border-radius:8px;background:oklch(25% 0.06 220 / 0.5);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+            <div style="width:16px;height:16px;background:oklch(72% 0.13 220);border-radius:4px;"></div>
+          </div>
+          <h3 style="font-size:21px;font-weight:700;margin:0 0 8px;color:white;">Cloud Migration &amp; Infrastructure</h3>
+          <p style="font-size:15px;line-height:1.6;color:oklch(72% 0.02 255);margin:0 0 16px;">Legacy-to-cloud migration planning, infrastructure-as-code, and ongoing cost optimization.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Legacy-to-cloud migration planning</div>
+            <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Infrastructure-as-code &amp; automation</div>
+            <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Cost optimization &amp; ongoing management</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="background:oklch(11% 0.018 255);padding:96px 24px;">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:56px;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:oklch(72% 0.13 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Our Mission</div>
+        <h2 class="df-title" style="font-size:clamp(28px,3.4vw,38px);font-weight:700;letter-spacing:-0.02em;margin:0 0 20px;color:white;">Built to be a reliable long-term partner, not a one-off vendor.</h2>
+        <p style="font-size:16px;line-height:1.7;color:oklch(70% 0.02 255);margin:0 0 16px;">Founded and led by Zezo Beshir, CEO, DotOne LLC is built to be a trusted, long-term partner, not just another vendor. We provide commercial and government organizations with direct access to experienced cybersecurity and cloud engineering expertise without the overhead of a traditional large integrator.</p>
+        <p style="font-size:16px;line-height:1.7;color:oklch(70% 0.02 255);margin:0;">Our mission is to reduce operational risk and modernize infrastructure through secure, scalable, and resilient solutions. We focus on delivering work that is well-documented, auditable, and designed to create lasting value beyond a single engagement.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;align-content:start;">
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Company Structure</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">LLC, privately held. Size and employee count available on request.</div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Certifications</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Socio-economic certifications (SDVOSB, WOSB, 8(a), HUBZone) to be confirmed and listed here.</div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Security Clearance</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Cleared personnel available for engagements requiring clearance. Levels available on request.</div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Core Values</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Accountability, technical rigor, and plain communication with every stakeholder.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITY STATEMENT -->
+  <section id="capability" style="background:oklch(14% 0.02 255);padding:96px 24px;">
+    <div style="max-width:1240px;margin:0 auto;">
+      <div style="background:linear-gradient(135deg, oklch(22% 0.05 220), oklch(16% 0.04 240));border:1px solid oklch(35% 0.08 220 / 0.5);border-radius:16px;padding:56px 40px;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:40px;">
+          <div style="max-width:560px;">
+            <div style="font-size:14px;font-weight:700;color:oklch(78% 0.12 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Capability Statement</div>
+            <h2 class="df-title" style="font-size:clamp(26px,3vw,34px);font-weight:700;letter-spacing:-0.02em;margin:0;color:white;">Everything a contracting officer needs, in one place.</h2>
+          </div>
+          <a href="mailto:contact@dotone.example?subject=Capability%20Statement%20Request" style="font-size:15px;font-weight:600;color:oklch(16% 0.02 255);background:white;padding:13px 22px;border-radius:6px;white-space:nowrap;">Request Full PDF</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:oklch(78% 0.12 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">Core Competencies</div>
+            <p style="font-size:15px;line-height:1.65;color:oklch(85% 0.01 255);margin:0;">Cybersecurity risk assessment &amp; compliance; cloud architecture, migration, and managed infrastructure.</p>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:oklch(78% 0.12 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">Differentiators</div>
+            <p style="font-size:15px;line-height:1.65;color:oklch(85% 0.01 255);margin:0;">Senior-only delivery team, fixed points of contact, documentation built for audit from day one.</p>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:oklch(78% 0.12 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">Past Performance</div>
+            <p style="font-size:15px;line-height:1.65;color:oklch(85% 0.01 255);margin:0;">Client and contract references available on request and in the full capability statement.</p>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:oklch(78% 0.12 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">Compliance</div>
+            <p style="font-size:15px;line-height:1.65;color:oklch(85% 0.01 255);margin:0;">Aligned to NIST 800-171; CMMC readiness in progress.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="background:oklch(11% 0.018 255);padding:96px 24px;">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:oklch(72% 0.13 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Contact</div>
+        <h2 class="df-title" style="font-size:clamp(28px,3.4vw,38px);font-weight:700;letter-spacing:-0.02em;margin:0 0 24px;color:white;">Reach out, or submit an RFP.</h2>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:36px;">
+          <div style="font-size:15px;color:oklch(80% 0.01 255);"><strong style="color: white;">Email:</strong> <a href="mailto:contact@dotonellc.com" style="color:oklch(72% 0.13 220);">contact@dotonellc.com</a></div>
+          <div style="font-size:15px;color:oklch(80% 0.01 255);"><strong style="color: white;">Phone:</strong> <a href="tel:+17035657891" style="color:oklch(72% 0.13 220);">(703) 565-7891</a></div>
+          <div style="font-size:15px;color:oklch(80% 0.01 255);"><br></div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:28px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:16px;">Government Registration</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div><div style="font-size:12px;color:oklch(65% 0.02 255);margin-bottom:2px;">UEI</div><div style="font-size:15px;font-weight:600;color:white;">DFZDY8HXK7N8</div></div>
+            <div><div style="font-size:12px;color:oklch(65% 0.02 255);margin-bottom:2px;">CAGE Code</div><div style="font-size:15px;font-weight:600;color:white;">9UCM0</div></div>
+            <div><div style="font-size:12px;color:oklch(65% 0.02 255);margin-bottom:2px;">NAICS Codes</div><div style="font-size:15px;font-weight:600;color:white;">541330,&nbsp;541611,&nbsp;541511</div></div>
+            <div><div style="font-size:12px;color:oklch(65% 0.02 255);margin-bottom:2px;">SAM.gov Status</div><div style="font-size:15px;font-weight:600;color:white;">Active Registration</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:32px;">
+        <sc-if value="{{ formSubmitted }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:20px 0;">
+            <div style="width:44px;height:44px;border-radius:50%;background:oklch(25% 0.06 220 / 0.5);display:flex;align-items:center;justify-content:center;">
+              <div style="width:12px;height:12px;background:oklch(72% 0.13 220);border-radius:50%;"></div>
+            </div>
+            <h3 style="margin:0;font-size:19px;font-weight:700;color:white;">Message received.</h3>
+            <p style="margin:0;font-size:15px;color:oklch(75% 0.02 255);">We'll respond within one business day.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ formNotSubmitted }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ handleSubmit }}" style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:600;color:oklch(80% 0.01 255);">Name</label>
+            <input ref="{{ nameRef }}" type="text" required="{{ true }}" style="padding:11px 14px;border:1px solid oklch(32% 0.05 220 / 0.5);border-radius:6px;font-size:15px;font-family:inherit;background:oklch(14% 0.02 255);color:white;">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:600;color:oklch(80% 0.01 255);">Organization</label>
+            <input ref="{{ orgRef }}" type="text" style="padding:11px 14px;border:1px solid oklch(32% 0.05 220 / 0.5);border-radius:6px;font-size:15px;font-family:inherit;background:oklch(14% 0.02 255);color:white;">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:600;color:oklch(80% 0.01 255);">Email</label>
+            <input ref="{{ emailRef }}" type="email" required="{{ true }}" style="padding:11px 14px;border:1px solid oklch(32% 0.05 220 / 0.5);border-radius:6px;font-size:15px;font-family:inherit;background:oklch(14% 0.02 255);color:white;">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:600;color:oklch(80% 0.01 255);">How can we help?</label>
+            <textarea ref="{{ messageRef }}" rows="4" style="padding:11px 14px;border:1px solid oklch(32% 0.05 220 / 0.5);border-radius:6px;font-size:15px;font-family:inherit;resize:vertical;background:oklch(14% 0.02 255);color:white;"></textarea>
+          </div>
+          <button type="submit" style="margin-top:8px;font-size:15px;font-weight:600;color:oklch(14% 0.02 255);background:white;padding:13px 22px;border-radius:6px;border:none;cursor:pointer;">Send Message</button>
+        </form>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:oklch(11% 0.018 255);border-top:1px solid oklch(28% 0.03 255);padding:32px 24px;">
+    <div style="max-width:1240px;margin:0 auto;font-size:13px;color:oklch(55% 0.02 255);text-align:center;">© 2025 DotOne LLC. All rights reserved. <a href="https://www.dotonellc.com" style="color:oklch(70% 0.02 255);text-decoration:underline;">www.dotonellc.com</a> | <a href="mailto:support@dotonellc.com" style="color:oklch(70% 0.02 255);text-decoration:underline;">support@dotonellc.com</a></div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.rootRef = React.createRef();
+    this.filmDriverRef = React.createRef();
+    this.stageRef = React.createRef();
+    this.videoWrapRef = React.createRef();
+    this.videoRef = React.createRef();
+    this.videoBRef = React.createRef();
+    this.gridOverlayRef = React.createRef();
+    this.vignetteRef = React.createRef();
+    this.beat1Ref = React.createRef();
+    this.beat2Ref = React.createRef();
+    this.beat3Ref = React.createRef();
+    this.nameRef = React.createRef();
+    this.orgRef = React.createRef();
+    this.emailRef = React.createRef();
+    this.messageRef = React.createRef();
+    this.state = { formSubmitted: false, mobileMenuOpen: false };
+  }
+
+  // p in [0,1]: 0 = film start, 1 = film end. Returns opacity with fade-in/hold/fade-out.
+  static beatAlpha(p, inStart, inEnd, outStart, outEnd) {
+    if (p <= inStart) return 0;
+    if (p < inEnd) return (p - inStart) / (inEnd - inStart);
+    if (p <= outStart) return 1;
+    if (p < outEnd) return 1 - (p - outStart) / (outEnd - outStart);
+    return 0;
+  }
+
+  updateFilm(p) {
+    const set = (ref, alpha, lift) => {
+      if (!ref.current) return;
+      ref.current.style.opacity = alpha;
+      if (lift !== undefined) ref.current.style.transform = `translateY(${(1 - alpha) * lift}px)`;
+    };
+    set(this.beat1Ref, Component.beatAlpha(p, -0.1, 0, 0.10, 0.14), -24);
+    set(this.beat2Ref, Component.beatAlpha(p, 0.14, 0.18, 0.34, 0.38), -24);
+    set(this.beat3Ref, Component.beatAlpha(p, 0.38, 0.42, 0.70, 0.78), -24);
+    if (this.gridOverlayRef.current) this.gridOverlayRef.current.style.opacity = Math.max(0, Math.min(1, (p - 0.68) / 0.14));
+    if (this.vignetteRef.current) this.vignetteRef.current.style.opacity = Math.max(0, Math.min(1, (p - 0.74) / 0.24));
+    if (this.videoWrapRef.current) this.videoWrapRef.current.style.transform = `scale(${1 + p * 0.15})`;
+  }
+
+  _setupCrossfadeLoop() {
+    if (this._unmounted) return;
+    if (!this.videoRef.current || !this.videoBRef.current) {
+      requestAnimationFrame(() => this._setupCrossfadeLoop());
+      return;
+    }
+    const FADE = 1.0;
+    const a = this.videoRef.current, b = this.videoBRef.current;
+    let active = a, idle = b;
+    let switching = false;
+    const onTime = () => {
+      if (this._unmounted) return;
+      if (!active.duration || isNaN(active.duration)) return;
+      const remaining = active.duration - active.currentTime;
+      if (!switching && remaining <= FADE && remaining > 0) {
+        switching = true;
+        idle.currentTime = 0;
+        idle.play().catch(() => {});
+        active.style.transition = `opacity ${FADE}s linear`;
+        idle.style.transition = `opacity ${FADE}s linear`;
+        idle.style.opacity = '1';
+        active.style.opacity = '0';
+      } else if (switching && remaining <= 0.05) {
+        active.pause();
+        const tmp = active; active = idle; idle = tmp;
+        switching = false;
+      }
+    };
+    a.addEventListener('timeupdate', onTime);
+    b.addEventListener('timeupdate', onTime);
+    this._crossfadeCleanup = () => {
+      a.removeEventListener('timeupdate', onTime);
+      b.removeEventListener('timeupdate', onTime);
+    };
+  }
+
+  componentDidMount() {
+    this._unmounted = false;
+    const JUMP = new URLSearchParams(location.search).get('jump');
+    if (JUMP !== null) history.scrollRestoration = 'manual';
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (this.videoRef.current) this.videoRef.current.play().catch(() => {});
+    this._setupCrossfadeLoop();
+    const tick = () => {
+      if (this._unmounted) return;
+      if (!reduced && this.filmDriverRef.current) {
+        const rect = this.filmDriverRef.current.getBoundingClientRect();
+        const p = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height - window.innerHeight)));
+        this.updateFilm(p);
+      }
+      this._raf = requestAnimationFrame(tick);
+    };
+    this._raf = requestAnimationFrame(tick);
+
+    if (JUMP !== null) {
+      scrollTo(0, +JUMP || 0);
+      const rect = this.filmDriverRef.current.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height - window.innerHeight)));
+      this.updateFilm(p);
+    }
+    window.__ready = true;
+  }
+
+  componentWillUnmount() {
+    this._unmounted = true;
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._crossfadeCleanup) this._crossfadeCleanup();
+  }
+
+  renderVals() {
+    return {
+      rootRef: this.rootRef,
+      filmDriverRef: this.filmDriverRef,
+      stageRef: this.stageRef,
+      videoWrapRef: this.videoWrapRef,
+      videoRef: this.videoRef,
+      videoBRef: this.videoBRef,
+      gridOverlayRef: this.gridOverlayRef,
+      vignetteRef: this.vignetteRef,
+      beat1Ref: this.beat1Ref,
+      beat2Ref: this.beat2Ref,
+      beat3Ref: this.beat3Ref,
+      mobileMenuOpen: this.state.mobileMenuOpen,
+      toggleMenu: () => this.setState(s => ({ mobileMenuOpen: !s.mobileMenuOpen })),
+      closeMenu: () => this.setState({ mobileMenuOpen: false }),
+      formSubmitted: this.state.formSubmitted,
+      formNotSubmitted: !this.state.formSubmitted,
+      nameRef: this.nameRef,
+      orgRef: this.orgRef,
+      emailRef: this.emailRef,
+      messageRef: this.messageRef,
+      handleSubmit: (e) => {
+        e.preventDefault();
+        const name = this.nameRef.current ? this.nameRef.current.value : '';
+        const org = this.orgRef.current ? this.orgRef.current.value : '';
+        const email = this.emailRef.current ? this.emailRef.current.value : '';
+        const message = this.messageRef.current ? this.messageRef.current.value : '';
+        const body = `Name: ${name}\nOrganization: ${org}\nEmail: ${email}\n\nMessage:\n${message}`;
+        window.location.href = `mailto:support@dotonellc.com?subject=${encodeURIComponent('Website inquiry from ' + name)}&body=${encodeURIComponent(body)}`;
+        this.setState({ formSubmitted: true });
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
