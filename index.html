@@ -17,6 +17,7 @@
   a:hover { color: oklch(24% 0.1 255); }
   .df-title { font-family: 'Space Grotesk', 'Public Sans', sans-serif; }
   @media (prefers-reduced-motion: reduce) { .film-beat { transition: none !important; } }
+  @keyframes scrollBounce { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(6px) rotate(45deg); } }
   #film-nav-links { display: flex; }
   #film-menu-btn { display: none; }
   @media (max-width: 760px) {
@@ -28,12 +29,20 @@
 
 <div ref="{{ rootRef }}" id="top" style="min-height:100vh;background:oklch(99% 0.004 255);">
 
+  <div style="position:fixed;top:0;left:0;right:0;height:4px;background:oklch(20% 0.02 255 / 0.4);z-index:199;"></div>
+  <div ref="{{ scrollBarRef }}" style="position:fixed;top:0;left:0;height:4px;width:0%;background:oklch(72% 0.13 220);z-index:200;"></div>
+
+  <div ref="{{ scrollHintRef }}" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.3s;">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:white;">Scroll</span>
+    <div style="width:12px;height:12px;border-right:2px solid white;border-bottom:2px solid white;transform:rotate(45deg);animation:scrollBounce 1.6s ease-in-out infinite;"></div>
+  </div>
+
   <!-- FIXED NAV -->
   <header style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 32px;">
     <a href="#top" class="df-title" style="font-weight:700;font-size:18px;letter-spacing:0.02em;color:white;background:oklch(20% 0.02 255 / 0.35);backdrop-filter:blur(6px);padding:8px 16px;border-radius:100px;">DOTONE</a>
     <nav id="film-nav-links" style="gap:22px;background:oklch(20% 0.02 255 / 0.35);backdrop-filter:blur(6px);padding:9px 20px;border-radius:100px;border:1px solid oklch(100% 0 0 / 0.12);">
-      <a href="#services" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Services</a>
       <a href="#about" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">About</a>
+      <a href="#services" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Services</a>
       <a href="#capability" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Capability</a>
       <a href="#contact" style="font-size:13px;font-weight:600;color:oklch(90% 0.02 220);">Contact</a>
     </nav>
@@ -43,8 +52,8 @@
   </header>
   <sc-if value="{{ mobileMenuOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;top:72px;left:16px;right:16px;z-index:99;background:oklch(14% 0.02 255 / 0.97);backdrop-filter:blur(10px);border:1px solid oklch(100% 0 0 / 0.12);border-radius:16px;padding:8px;display:flex;flex-direction:column;">
-      <a href="#services" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">Services</a>
       <a href="#about" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">About</a>
+      <a href="#services" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">Services</a>
       <a href="#capability" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;border-bottom:1px solid oklch(100% 0 0 / 0.08);">Capability</a>
       <a href="#contact" onClick="{{ closeMenu }}" style="padding:14px 16px;font-size:16px;font-weight:600;color:white;">Contact</a>
     </div>
@@ -56,7 +65,6 @@
 
       <div ref="{{ videoWrapRef }}" style="position:absolute;inset:0;">
         <video ref="{{ videoRef }}" src="assets/globe-hero.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;filter:brightness(0.9) saturate(1.05);opacity:1;"></video>
-        <video ref="{{ videoBRef }}" src="assets/globe-hero.mp4" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;filter:brightness(0.9) saturate(1.05);opacity:0;"></video>
         <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, oklch(15% 0.03 255 / 0.1) 0%, oklch(8% 0.02 255 / 0.75) 100%);"></div>
       </div>
 
@@ -99,7 +107,37 @@
   <div style="height:14vh;background:linear-gradient(to bottom, black, oklch(14% 0.02 255));"></div>
 
   <!-- SERVICES -->
-  <section id="services" style="background:oklch(14% 0.02 255);padding:80px 24px 96px;">
+  <section id="about" style="background:oklch(14% 0.02 255);padding:96px 24px;">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:56px;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:oklch(72% 0.13 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Our Mission</div>
+        <h2 class="df-title" style="font-size:clamp(28px,3.4vw,38px);font-weight:700;letter-spacing:-0.02em;margin:0 0 20px;color:white;">Built to be a reliable long-term partner, not a one-off vendor.</h2>
+        <p style="font-size:16px;line-height:1.7;color:oklch(70% 0.02 255);margin:0 0 16px;">Founded and led by Zezo Beshir, CEO, DotOne LLC is built to be a trusted, long-term partner, not just another vendor. We provide commercial and government organizations with direct access to experienced cybersecurity and cloud engineering expertise without the overhead of a traditional large integrator.</p>
+        <p style="font-size:16px;line-height:1.7;color:oklch(70% 0.02 255);margin:0;">Our mission is to reduce operational risk and modernize infrastructure through secure, scalable, and resilient solutions. We focus on delivering work that is well-documented, auditable, and designed to create lasting value beyond a single engagement.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;align-content:start;">
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Company Structure</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">LLC, privately held. Size and employee count available on request.</div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Certifications</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Socio-economic certifications (SDVOSB, WOSB, 8(a), HUBZone) to be confirmed and listed here.</div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Security Clearance</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Cleared personnel available for engagements requiring clearance. Levels available on request.</div>
+        </div>
+        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
+          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Core Values</div>
+          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Accountability, technical rigor, and plain communication with every stakeholder.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" style="background:oklch(11% 0.018 255);padding:96px 24px;">
     <div style="max-width:1240px;margin:0 auto;">
       <div style="max-width:640px;margin-bottom:48px;">
         <div style="font-size:14px;font-weight:700;color:oklch(72% 0.13 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Services</div>
@@ -130,36 +168,6 @@
             <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Infrastructure-as-code &amp; automation</div>
             <div style="font-size:14px;color:oklch(78% 0.02 255);display:flex;gap:8px;"><span style="color:oklch(72% 0.13 220);">—</span> Cost optimization &amp; ongoing management</div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about" style="background:oklch(11% 0.018 255);padding:96px 24px;">
-    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:56px;">
-      <div>
-        <div style="font-size:14px;font-weight:700;color:oklch(72% 0.13 220);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;">Our Mission</div>
-        <h2 class="df-title" style="font-size:clamp(28px,3.4vw,38px);font-weight:700;letter-spacing:-0.02em;margin:0 0 20px;color:white;">Built to be a reliable long-term partner, not a one-off vendor.</h2>
-        <p style="font-size:16px;line-height:1.7;color:oklch(70% 0.02 255);margin:0 0 16px;">Founded and led by Zezo Beshir, CEO, DotOne LLC is built to be a trusted, long-term partner, not just another vendor. We provide commercial and government organizations with direct access to experienced cybersecurity and cloud engineering expertise without the overhead of a traditional large integrator.</p>
-        <p style="font-size:16px;line-height:1.7;color:oklch(70% 0.02 255);margin:0;">Our mission is to reduce operational risk and modernize infrastructure through secure, scalable, and resilient solutions. We focus on delivering work that is well-documented, auditable, and designed to create lasting value beyond a single engagement.</p>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;align-content:start;">
-        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
-          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Company Structure</div>
-          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">LLC, privately held. Size and employee count available on request.</div>
-        </div>
-        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
-          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Certifications</div>
-          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Socio-economic certifications (SDVOSB, WOSB, 8(a), HUBZone) to be confirmed and listed here.</div>
-        </div>
-        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
-          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Security Clearance</div>
-          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Cleared personnel available for engagements requiring clearance. Levels available on request.</div>
-        </div>
-        <div style="background:oklch(18% 0.025 250);border:1px solid oklch(32% 0.05 220 / 0.4);border-radius:10px;padding:24px;">
-          <div style="font-size:13px;font-weight:700;color:oklch(72% 0.13 220);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Core Values</div>
-          <div style="font-size:15px;color:oklch(85% 0.01 255);line-height:1.6;">Accountability, technical rigor, and plain communication with every stakeholder.</div>
         </div>
       </div>
     </div>
@@ -270,7 +278,8 @@ class Component extends DCLogic {
     this.stageRef = React.createRef();
     this.videoWrapRef = React.createRef();
     this.videoRef = React.createRef();
-    this.videoBRef = React.createRef();
+    this.scrollBarRef = React.createRef();
+    this.scrollHintRef = React.createRef();
     this.gridOverlayRef = React.createRef();
     this.vignetteRef = React.createRef();
     this.beat1Ref = React.createRef();
@@ -306,40 +315,11 @@ class Component extends DCLogic {
     if (this.videoWrapRef.current) this.videoWrapRef.current.style.transform = `scale(${1 + p * 0.15})`;
   }
 
-  _setupCrossfadeLoop() {
+  _ensureVideoPlaying() {
     if (this._unmounted) return;
-    if (!this.videoRef.current || !this.videoBRef.current) {
-      requestAnimationFrame(() => this._setupCrossfadeLoop());
-      return;
-    }
-    const FADE = 1.0;
-    const a = this.videoRef.current, b = this.videoBRef.current;
-    let active = a, idle = b;
-    let switching = false;
-    const onTime = () => {
-      if (this._unmounted) return;
-      if (!active.duration || isNaN(active.duration)) return;
-      const remaining = active.duration - active.currentTime;
-      if (!switching && remaining <= FADE && remaining > 0) {
-        switching = true;
-        idle.currentTime = 0;
-        idle.play().catch(() => {});
-        active.style.transition = `opacity ${FADE}s linear`;
-        idle.style.transition = `opacity ${FADE}s linear`;
-        idle.style.opacity = '1';
-        active.style.opacity = '0';
-      } else if (switching && remaining <= 0.05) {
-        active.pause();
-        const tmp = active; active = idle; idle = tmp;
-        switching = false;
-      }
-    };
-    a.addEventListener('timeupdate', onTime);
-    b.addEventListener('timeupdate', onTime);
-    this._crossfadeCleanup = () => {
-      a.removeEventListener('timeupdate', onTime);
-      b.removeEventListener('timeupdate', onTime);
-    };
+    const v = this.videoRef.current;
+    if (v && v.paused) v.play().catch(() => {});
+    this._videoWatchdog = setTimeout(() => this._ensureVideoPlaying(), 2000);
   }
 
   componentDidMount() {
@@ -348,15 +328,26 @@ class Component extends DCLogic {
     if (JUMP !== null) history.scrollRestoration = 'manual';
     const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (this.videoRef.current) this.videoRef.current.play().catch(() => {});
-    this._setupCrossfadeLoop();
+    if (this.videoRef.current) {
+      this.videoRef.current.play().catch(() => {});
+      this.videoRef.current.addEventListener('pause', () => { if (!this._unmounted) this.videoRef.current.play().catch(() => {}); });
+      this.videoRef.current.addEventListener('ended', () => { if (!this._unmounted) { this.videoRef.current.currentTime = 0; this.videoRef.current.play().catch(() => {}); } });
+    }
+    this._ensureVideoPlaying();
     const tick = () => {
       if (this._unmounted) return;
-      if (!reduced && this.filmDriverRef.current) {
+      if (this.filmDriverRef.current) {
         const rect = this.filmDriverRef.current.getBoundingClientRect();
-        const p = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height - window.innerHeight)));
-        this.updateFilm(p);
+        if (!reduced) {
+          const p = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height - window.innerHeight)));
+          this.updateFilm(p);
+        }
+        if (this.scrollHintRef.current) this.scrollHintRef.current.style.opacity = rect.bottom > 60 ? '1' : '0';
       }
+      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const overallP = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
+      if (this.scrollBarRef.current) this.scrollBarRef.current.style.width = (overallP * 100) + '%';
       this._raf = requestAnimationFrame(tick);
     };
     this._raf = requestAnimationFrame(tick);
@@ -373,7 +364,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     this._unmounted = true;
     if (this._raf) cancelAnimationFrame(this._raf);
-    if (this._crossfadeCleanup) this._crossfadeCleanup();
+    if (this._videoWatchdog) clearTimeout(this._videoWatchdog);
   }
 
   renderVals() {
@@ -383,7 +374,8 @@ class Component extends DCLogic {
       stageRef: this.stageRef,
       videoWrapRef: this.videoWrapRef,
       videoRef: this.videoRef,
-      videoBRef: this.videoBRef,
+      scrollBarRef: this.scrollBarRef,
+      scrollHintRef: this.scrollHintRef,
       gridOverlayRef: this.gridOverlayRef,
       vignetteRef: this.vignetteRef,
       beat1Ref: this.beat1Ref,
